@@ -15,7 +15,6 @@ class App:
 
 
         #Inputs creation
-      
         Label(frame, text = 'Classroom code: ').grid(row = 1, column = 0)
         self.idClassroom_entry = Entry(frame)
         self.idClassroom_entry.grid(row = 1, column = 1)
@@ -36,14 +35,15 @@ class App:
 
         #Button creation
         ttk.Button(frame, text = 'Save new classroom', command = self.insert_classroom).grid(row=5, columnspan = 2, sticky = W + E)
-
+        ttk.Button(frame, text = "Delete row", command = self.delete_classroom).grid(row = 6, columnspan =2, sticky=W+E)
+        ttk.Button(frame, text = "Update row",command=self.update_classroom).grid(row = 7, columnspan =2, sticky=W+E)
 
         #Control messages
         self.message = Label(text = '', fg = "red")
         self.message.grid(row = 3, column = 0, columnspan=2, sticky=W+E)
         #Table creation (NOT SQL). Tree keyword for instancing a table
         
-
+        #Table parameters
         self.tree = ttk.Treeview (column=("c1", "c2","c3","c4"), show= 'headings', height= 8)
         self.tree.grid(row = 4, column = 0, columnspan = 2)
         
@@ -61,12 +61,19 @@ class App:
 
         self.get_classrooms()
 
+
+
+#CRUD METHODS
     def run_query(self,query, parameters=()): #BRINNG DATA BY QUERYING
         with sqlite3.connect("schedule_manager.db") as connection:
             cursor = connection.cursor()
             q_result = cursor.execute(query, parameters)
             connection.commit()
             return q_result
+
+    def validating_inputs (self):
+        validation = len(self.idClassroom_entry.get()) != 0 and len(self.type_entry.get()) != 0 and len(self.location_entry.get()) != 0 and len(self.capacity_entry.get()) != 0 
+        return validation
         
     def get_classrooms(self):
         #Cleaning table from previous data
@@ -81,24 +88,58 @@ class App:
             self.tree.insert('',0, text = row[1], values = (row[0],row[1], row[2], row[3]))
 
 
-    def validating_inputs (self):
-        validation = len(self.idClassroom_entry.get()) != 0 and len(self.type_entry.get()) != 0 and len(self.location_entry.get()) != 0 and len(self.capacity_entry.get()) != 0 
-        return validation
-    
-
-    
     def insert_classroom(self):
         if self.validating_inputs():
             query = 'insert into CLASSROOM values (?,?,?,?)'
             parameters = (self.idClassroom_entry.get(), self.type_entry.get(), self.location_entry.get(), self.capacity_entry.get())
             self.run_query(query,parameters)
-            self.message["text"] = "Clasrrom {} added succesfully to database".format(self.idClassroom_entry.get())
+            self.message["text"] = "Clasroom {} added succesfully to database".format(self.idClassroom_entry.get())
+            self.idClassroom_entry.delete(0,END)
+            self.type_entry.delete(0,END)
+            self.location_entry.delete(0,END)
+            self.capacity_entry.delete(0,END)
+
         else:
-            print("Some data is missing")
+            self.message["text"] = "Some essential data might be missing, try again please"
         self.get_classrooms()
 
 
+    def delete_classroom(self):
+        self.message['text'] = ""
+        try:
+            self.tree.item(self.tree.selection())['text']
+        except IndexError as error:
+            self.message['text'] = "Please select an element"
+            return
+        self.message['text'] = ""
 
+        param = self.tree.item(self.tree.selection())['values'][0]
+        query = "delete from CLASSROOM where idClassroom = ?"
+        self.run_query(query,(param,))
+        self.message["text"] = "Classroom {} was deleted succesfully".format(param)
+        self.get_classrooms()
+
+    
+    def update_classroom(self):
+        self.message['text'] = ""
+        try:
+            self.tree.item(self.tree.selection())['text']
+        except IndexError as error:
+            self.message['text'] = "Please select an element"
+            return
+        param = self.tree.item(self.tree.selection())['text']
+        old_value = self.tree.item(self.tree.selection())['values'][0]
+        self.edit_window = Toplevel()
+        self.edit_window.title = "Edit Value"
+
+        #Old value
+        Label(self.edit_window, text = 'Old value: ').grid(row = 0, column=1)
+        Entry(self.edit_window, textvariable=StringVar(self.edit_window, value = param), state ="readonly").grid(row = 0, column=2)
+
+        #New Value
+
+
+        
 
 
 
