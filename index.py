@@ -1,7 +1,7 @@
 from tkinter import ttk
 from tkinter import *
 import sqlite3
-#  EXAMPLE MADE ONLY FOR CLASSROOM TABLE FROM DATABASE
+
 class App:
     def __init__(self,window): #METHOD TO CREATE THE MAIN WINDOW
         self.window = window
