@@ -31,8 +31,6 @@ class App:
         self.capacity_entry = Entry(frame)
         self.capacity_entry.grid(row = 4, column = 1)
 
-
-
         #Button creation
         ttk.Button(frame, text = 'Save new classroom', command = self.insert_classroom).grid(row=5, columnspan = 2, sticky = W + E)
         ttk.Button(frame, text = "Delete row", command = self.delete_classroom).grid(row = 6, columnspan =2, sticky=W+E)
@@ -41,7 +39,6 @@ class App:
         #Control messages
         self.message = Label(text = '', fg = "red")
         self.message.grid(row = 3, column = 0, columnspan=2, sticky=W+E)
-        #Table creation (NOT SQL). Tree keyword for instancing a table
         
         #Table parameters
         self.tree = ttk.Treeview (column=("c1", "c2","c3","c4"), show= 'headings', height= 8)
@@ -60,8 +57,6 @@ class App:
         self.tree.heading("#4", text = "capacity")        
 
         self.get_classrooms()
-
-
 
 #CRUD METHODS
     def run_query(self,query, parameters=()): #BRINNG DATA BY QUERYING
@@ -119,7 +114,7 @@ class App:
         self.message["text"] = "Classroom {} was deleted succesfully".format(param)
         self.get_classrooms()
 
-    
+     
     def update_classroom(self):
         self.message['text'] = ""
         try:
@@ -134,34 +129,29 @@ class App:
 
         #Old value
         Label(self.edit_window, text = 'Old value: ').grid(row = 0, column=1)
-        Entry(self.edit_window, textvariable=StringVar(self.edit_window, value = param), state ="readonly").grid(row = 0, column=2)
+        Entry(self.edit_window, textvariable=StringVar(self.edit_window, value = old_value), state ="readonly").grid(row = 0, column=2)
 
-        #New Value
+        #New value
+        Label(self.edit_window, text = 'New value: ').grid(row = 1, column=1)
+        new_value = Entry(self.edit_window)
+        new_value.grid(row =1, column = 2)
+
+        Button(self.edit_window, text = "Update", command = lambda:self.edit_row(new_value.get(), old_value)).grid(row = 2, column = 1, sticky = W + E)
+
+    def edit_row(self, new_value, old_value):
+        query = "UPDATE CLASSROOM SET TYPE = ? WHERE idClassroom = ?"
+        param = (new_value, old_value)
+        self.run_query(query, param)
+        self.edit_window.destroy()
+        self.message['text'] = "Row updarted with success"
+        self.get_classrooms()
 
 
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     
 # Main function to start all the components
 if __name__ == '__main__':
     window = Tk()
     application = App(window)
     window.mainloop()
-
 
