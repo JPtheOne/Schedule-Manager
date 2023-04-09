@@ -1,12 +1,11 @@
 from tkinter import ttk
 from tkinter import *
-
 import sqlite3
 #  EXAMPLE MADE ONLY FOR CLASSROOM TABLE FROM DATABASE
 class App:
     def __init__(self,window): #METHOD TO CREATE THE MAIN WINDOW
         self.window = window
-        self.window.title("CRUD APP MENU")
+        self.window.title("Clasroom")
         self.window.geometry("1000x700")
 
         #Create a frame container

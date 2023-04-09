@@ -12,7 +12,7 @@ class CustomWindow:
         self.table_name = table_name
 
         # Create a frame container
-        frame = LabelFrame(self.window, text= f"Insert a {table_name}")
+        frame = LabelFrame(self.window, text="Insert an item")
         frame.grid(row=0, column=0, columnspan=3, pady=20)
 
         # Inputs creation
@@ -59,7 +59,7 @@ class CustomWindow:
         for element in records:
             self.tree.delete(element)
 
-        query = f"Select * from {self.table_name}"
+        query = "Select * from {self.table_name}"
         db_rows = self.run_query(query)
 
         for row in db_rows:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
 
     root = Tk()
-    TABLE = "Professor"
+    TABLE = "PROFESSOR"
     field_names = get_column_names(TABLE)
     app = CustomWindow(root, field_names,TABLE)
     root.mainloop()
