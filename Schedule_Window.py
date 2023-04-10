@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import sqlite3
-from CRUD_methods import *
+from basicCRUD_methods import *
 
 class ScheduleWindow:
     #All the design of the GUI window takes place here. The GUI adapts to the database table that will be manipulated
@@ -9,7 +9,7 @@ class ScheduleWindow:
         #Window properties
         self.window = window
         self.window.title("CRUD APP MENU")
-        self.window.geometry("1000x700")
+        self.window.geometry("1000x1050")
         self.field_names = field_names
         self.table_name = table_name
 
@@ -45,6 +45,7 @@ class ScheduleWindow:
         #Display information on crated table
         self.get_rows()
 
+
 ScheduleWindow.run_query = run_query
 ScheduleWindow.validating_inputs = validating_inputs
 ScheduleWindow.get_rows = get_rows
@@ -56,7 +57,7 @@ ScheduleWindow.edit_row = edit_row
     
 if __name__ == "__main__":
 
-    def get_column_names(table_name):
+    def get_field_names(table_name):
         with sqlite3.connect("schedule_manager.db") as connection:
             cursor = connection.cursor()
             cursor.execute(f"PRAGMA table_info({table_name})")
@@ -67,6 +68,6 @@ if __name__ == "__main__":
 
     root = Tk()
     TABLE = "Classroom"
-    field_names = get_column_names(TABLE)
+    field_names = get_field_names(TABLE)
     app = ScheduleWindow(root, field_names,TABLE)
     root.mainloop()

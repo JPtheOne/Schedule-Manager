@@ -1,4 +1,7 @@
-#FILE STORING THE CRUD METHODS 
+#***************************************** Basic CRUD Methods ***********************************************
+#File storing the basic CRUD methods 
+#The four crud methods are applied for normal tables such as PROFESSOR, COURSE and CLASSROOM
+
 import sqlite3
 from tkinter import END, Toplevel, Label, Entry, Button, StringVar, W, E, ttk
 
