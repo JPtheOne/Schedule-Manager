@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import LabelFrame
 import sqlite3
-from custom_window import ScheduleWindow
+from Schedule_Window import ScheduleWindow
 
 def get_column_names(table_name):
     with sqlite3.connect("schedule_manager.db") as connection:

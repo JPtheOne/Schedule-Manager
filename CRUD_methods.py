@@ -1,5 +1,7 @@
+#FILE STORING THE CRUD METHODS 
 import sqlite3
 from tkinter import END, Toplevel, Label, Entry, Button, StringVar, W, E, ttk
+
 #Basic declaration of query. Essential for every DB operation
 def run_query(self, query, parameters=()):
     with sqlite3.connect("schedule_manager.db") as connection:
@@ -92,7 +94,7 @@ def update_row(self):
 
     def on_column_change(event):
         column = selected_column.get()
-        old_value.set(self.tree.item(self.tree.selection())['values'][self.field_names.index(column) - 1])
+        old_value.set(self.tree.item(self.tree.selection())['values'][self.field_names.index(column)])
 
     column_dropdown.bind("<<ComboboxSelected>>", on_column_change)
     on_column_change()
