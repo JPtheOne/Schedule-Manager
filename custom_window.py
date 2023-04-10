@@ -100,7 +100,7 @@ class ScheduleWindow:
         self.message["text"] = f"{self.table_name[:-1]} {primary_key_value} was deleted successfully"
         self.get_rows()
 
-
+    #Update the selected row in actual table (U in CRUD)
     def update_row(self):
         self.message['text'] = ""
         try:
@@ -138,6 +138,7 @@ class ScheduleWindow:
             old_value.set(self.tree.item(self.tree.selection())['values'][self.field_names.index(column) - 1])
 
         column_dropdown.bind("<<ComboboxSelected>>", on_column_change)
+        on_column_change()
 
     def edit_row(self, primary_key_value, selected_column, old_value, new_value):
         query = f"UPDATE {self.table_name} SET {selected_column} = ? WHERE {self.field_names[0]} = ?"
@@ -160,7 +161,7 @@ if __name__ == "__main__":
 
 
     root = Tk()
-    TABLE = "Course"
+    TABLE = "Classroom"
     field_names = get_column_names(TABLE)
     app = ScheduleWindow(root, field_names,TABLE)
     root.mainloop()
