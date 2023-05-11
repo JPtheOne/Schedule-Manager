@@ -1,8 +1,13 @@
 #***************************************** Complex CRUD Methods ***********************************************
+
 #File storing the complex CRUD methods 
-#Insert methods is modified for the special table and super entity called SCHEDULE  
 from datetime import datetime, timedelta
 from tkinter import messagebox
+
+import sqlite3
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 #Calculate end hour variable because SQLite does not support this operation
 def calculate_end_hour(start_hour, duration):
@@ -69,5 +74,43 @@ def validate_schedule_insertion(self):
     if result.fetchone():
         messagebox.showerror("Error", "Schedule conflict detected for the same Classroom and Professor. Please check the input values.")
         return False
-
     return True
+
+def print_PDF(self,table_name):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('schedule_manager.db')
+    
+    # Use pandas to read the table data
+    df = pd.read_sql_query(f"SELECT * from {table_name}", conn)
+    
+    # Close the connection
+    conn.close()
+    
+    # Create a PdfPages object
+    pdf_pages = PdfPages(f'{table_name} table.pdf')
+    
+    # Create a new figure and set the figsize
+    fig, ax =plt.subplots(figsize=(12,4))
+    
+    # Remove the box around the plot
+    ax.axis('tight')
+    
+    # Remove the y axis
+    ax.axis('off')
+    
+    # Create a table and add it to the plot
+    table = plt.table(cellText=df.values,
+                      colLabels=df.columns,
+                      cellLoc = 'center', 
+                      loc='center')
+
+    # Scale the table to fit the plot
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1, 1.5)
+    
+    # Save the figure to the PdfPages object
+    pdf_pages.savefig(fig, bbox_inches='tight')
+    
+    # Close the PdfPages object
+    pdf_pages.close()

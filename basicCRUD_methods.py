@@ -102,6 +102,7 @@ def update_row(self):
     column_dropdown.bind("<<ComboboxSelected>>", on_column_change)
     on_column_change()
 
+#Needed to update the row
 def edit_row(self, primary_key_value, selected_column, old_value, new_value):
     query = f"UPDATE {self.table_name} SET {selected_column} = ? WHERE {self.field_names[0]} = ?"
     params = (new_value, primary_key_value)
